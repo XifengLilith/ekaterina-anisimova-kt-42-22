@@ -1,4 +1,9 @@
+using NLog;
+using NLog.Web;
+
 var builder = WebApplication.CreateBuilder(args);
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+try { 
 
 // Add services to the container.
 
@@ -21,3 +26,12 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+}
+catch(Exception ex)
+{
+    logger.Error(ex, "Stopped program because of exception");
+}
+finally
+{
+    LogManager.Shutdown();
+}
